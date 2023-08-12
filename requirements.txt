@@ -4,3 +4,4 @@ PyPDF2
 openai
 pytesseract
 python-dotenv
+gunicorn
