@@ -3,4 +3,4 @@ requests
 PyPDF2
 openai
 pytesseract
-dotenv
+python-dotenv
