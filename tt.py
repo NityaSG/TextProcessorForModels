@@ -5,7 +5,8 @@ import PyPDF2
 import json
 import openai
 from pytesseract import image_to_string
-
+from dotenv import load_dotenv
+load_dotenv()
 app = Flask(__name__)
 
 @app.route('/parse_pdf', methods=['POST'])
