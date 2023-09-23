@@ -147,6 +147,68 @@ def parse_img():
         return jsonify({'error': str(e)}), 400
 
 
+@app.route('/ayurved', methods=['POST'])
+def ayurved():
+    def extract_info(text):
+        funsions=[
+    {
+    'name':'extractinfo',
+    'description':'Returns informations about the given ayurvedic medicine',
+    'parameters':{
+        'type':'object',
+        'properties':{
+            'info':{
+                'type':'string',
+            'description':'Description of the given medicine'
+        },
+        'adv':{
+            'type':'string',
+            'description':'Advantages of the medicine'
+        },
+        'disadv':{
+            'type':"string",
+            'description':'disadvantage of the medicine'
+        },
+        'products':{
+            'type':'string',
+            'description':'name and links of medicine products from https://www.patanjaliayurved.net/'
+        }
+
+    }
+    }
+    }
+]
+        openai_response = openai.ChatCompletion.create(
+        model = 'gpt-4-0613',
+        messages = [{'role': 'user', 'content': text}],
+        functions = funsions,
+        function_call = 'auto'
+        )
+        json_str = json.dumps(openai_response)
+        json_obj = json.loads(json_str)
+        arguments = json_obj['choices'][0]['message']['function_call']['arguments']
+        return arguments
+
+
+
+    data = request.get_json()
+
+    if not data or not isinstance(data, list):
+        return jsonify({'error': 'Invalid JSON format. Expecting a list of dictionaries.'}), 400
+
+    if len(data) == 0 or 'pdf_url' not in data[0]:
+        return jsonify({'error': 'PDF URL not provided in the request'}), 400
+
+    pdf_url = data[0]['pdf_url']
+
+    try:
+        text=extract_info(text)
+        
+        return jsonify({'text': text})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
