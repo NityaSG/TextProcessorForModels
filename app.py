@@ -199,7 +199,7 @@ def ayurved():
     if len(data) == 0 or 'pdf_url' not in data[0]:
         return jsonify({'error': 'PDF URL not provided in the request'}), 400
 
-    pdf_url = data[0]['pdf_url']
+    text = data[0]['pdf_url']
 
     try:
         text=extract_info(text)
